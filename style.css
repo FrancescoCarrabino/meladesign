@@ -1,0 +1,220 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    /* Use the pixel font as a base, or specifically for the intro */
+    font-family: 'VT323', monospace; /* CHANGED FONT - or apply only to intro */
+    background-color: #222;
+    color: #fff;
+}
+
+/* ... (keep .notebook-container, .notebook, #notebookSpreadImage as they were for full page) ... */
+.notebook-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notebook {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    overflow: hidden;
+}
+
+#notebookSpreadImage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- STYLES FOR INTRO TEXT OVERLAY --- */
+#introTextOverlay {
+    position: absolute;
+    top: 50%; /* Vertically center the block */
+    left: 25%; /* Horizontally center within the left half of the notebook */
+    transform: translate(-50%, -50%); /* Precise centering of the block */
+    width: auto; /* Let content define width, or set a max-width: 40vw or similar */
+    max-width: calc(50% - 40px); /* Max width is half the notebook minus some padding */
+    padding: 20px;
+    text-align: left; /* Text within the block is left-aligned */
+    color: #ffffff;
+    font-family: 'VT323', monospace; /* Specific pixel font */
+    z-index: 15; /* Above image, below buttons/nav arrows if they might overlap */
+    display: none; /* Initially hidden - JS will show it */
+    pointer-events: none; /* IMPORTANT: Allows clicks to pass through to nav arrows */
+    line-height: 1.3; /* Adjust for readability */
+}
+
+#introTextOverlay .intro-line-1 {
+    font-size: 3.5rem; /* Adjust size as needed */
+    margin-bottom: 1rem; /* Space between lines */
+    /* text-transform: uppercase; /* Optional, if needed */
+}
+
+#introTextOverlay .intro-line-2 {
+    font-size: 2rem; /* Adjust size as needed */
+}
+
+#introTextOverlay u { /* Style for the underline */
+    text-decoration-color: #fff; /* Ensure underline is also white */
+    text-decoration-thickness: 2px; /* Optional: thicker underline */
+    text-underline-offset: 3px; /* Optional: space between text and underline */
+}
+/* --- STYLES FOR OUTRO TEXT OVERLAY --- */
+#outroTextOverlay {
+    position: absolute;
+    top: 50%;
+    /* Position in the right half: left: 75% centers the block's midpoint in the right half's center */
+    /* Or use right: 25% and adjust transform if preferred, but left:75% with translate(-50%...) is consistent */
+    left: 75%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    max-width: calc(50% - 40px); /* Max width is half the notebook minus some padding */
+    padding: 20px;
+    text-align: left; /* Text within the block is left-aligned */
+    color: #ffffff;
+    font-family: 'VT323', monospace;
+    z-index: 15; /* Same as intro, above image */
+    display: none; /* Initially hidden - JS will show it */
+    pointer-events: none; /* Allows clicks to pass through if necessary */
+    line-height: 1.3;
+}
+
+#outroTextOverlay .outro-line-1 {
+    font-size: 2.8rem; /* Adjusted to better fit "Thanks for your attention" */
+    margin-bottom: 1.8rem; /* More space before contact details */
+}
+
+#outroTextOverlay .contact-details {
+    font-size: 1.5rem; /* Font size for contact info */
+    line-height: 1.5; /* Spacing between contact lines */
+}
+
+#outroTextOverlay .contact-details p {
+    margin: 0 0 0.2em 0; /* Small bottom margin for each contact line */
+}
+
+/* ... (keep .nav-arrow styles) ... */
+.nav-arrow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    cursor: pointer;
+    z-index: 10; /* Intro text z-index should be > image, < nav arrows if they overlap */
+                 /* Or intro text z-index > nav-arrows, but with pointer-events: none */
+}
+/* if introTextOverlay z-index is 15, nav-arrow needs to be > 15 OR introText has pointer-events: none.
+   We used pointer-events: none, so nav-arrow z-index:10 is fine. */
+
+.prev-area {
+    left: 0;
+}
+
+.next-area {
+    right: 0;
+}
+
+
+/* ... (keep .overlay-button and individual button styles) ... */
+.overlay-button {
+    position: absolute;
+    bottom: 25px;
+    z-index: 20; /* Higher than intro text */
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: Georgia, 'Times New Roman', Times, serif; /* Buttons use serif */
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+/* ... rest of button styles ... */
+#goToStartBtn {
+    left: 25px;
+    font-family: Georgia, 'Times New Roman', Times, serif; /* Ensure serif font for buttons */
+}
+
+#goToEndBtn {
+    right: 25px;
+    font-family: Georgia, 'Times New Roman', Times, serif; /* Ensure serif font for buttons */
+}
+
+.button-icon {
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.5em;
+    vertical-align: middle;
+}
+
+
+/* --- MEDIA QUERIES for intro text --- */
+@media (max-width: 1200px) {
+    #introTextOverlay .intro-line-1 {
+        font-size: 3rem;
+    }
+    #introTextOverlay .intro-line-2 {
+        font-size: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    #introTextOverlay {
+        /* Adjust positioning or size for tablets if needed */
+        /* left: 5%; transform: translateY(-50%); max-width: 80%; text-align:center; */
+    }
+    #introTextOverlay .intro-line-1 {
+        font-size: 2.5rem;
+    }
+    #introTextOverlay .intro-line-2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    #introTextOverlay {
+        padding: 10px;
+        left: 50%; /* Center on small screens */
+        transform: translate(-50%, -50%);
+        text-align: center;
+        max-width: 90%;
+    }
+    #introTextOverlay .intro-line-1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    #introTextOverlay .intro-line-2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* ... (keep media queries for overlay-button if separate) ... */
+@media (max-height: 500px), (max-width: 600px) { /* Combined for general small screens */
+    .overlay-button {
+        bottom: 15px; /* Closer to edge */
+        font-size: 0.9rem;
+        padding: 6px 10px;
+    }
+    #goToStartBtn {
+        left: 15px;
+    }
+    #goToEndBtn {
+        right: 15px;
+    }
+    .button-icon {
+        width: 1.1em;
+        height: 1.1em;
+    }
+}
