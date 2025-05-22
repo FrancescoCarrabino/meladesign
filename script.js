@@ -7,101 +7,46 @@ document.addEventListener('DOMContentLoaded', () => {
 	const introTextOverlay = document.getElementById('introTextOverlay');
 	const outroTextOverlay = document.getElementById('outroTextOverlay');
 
-	// --- CONFIGURATION: YOUR SPREAD IMAGES ---
-	// Add the paths to your SPREAD images here, IN ORDER.
-	// Paths are relative to index.html (e.g., "images/my-spread.jpg")
 	const spreadImages = [
-		"images/spread-01.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-02.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-03.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-04.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-05.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-06.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-07.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-08.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-09.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-10.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-11.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-12.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-13.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-14.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-15.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-16.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-17.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-18.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-19.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-20.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-21.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-22.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-23.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-24.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-25.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-26.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-27.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-28.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-29.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-30.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-31.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-32.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-33.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-34.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-35.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-36.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-37.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-38.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-39.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-40.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-41.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-42.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-43.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-44.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-45.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-46.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-47.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-48.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-49.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-50.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-51.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-52.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-53.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-54.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-55.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-56.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-57.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-58.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-59.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-60.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-61.jpg", // Example: Your "Hello I'm Manuela" spread
-		"images/spread-62.jpg", // Example: Your "Hello I'm Manuela" spread
+		"images/spread-01.png", "images/spread-02.png", "images/spread-03.png",
+		"images/spread-04.png", "images/spread-05.png", "images/spread-06.png",
+		"images/spread-07.png", "images/spread-08.png", "images/spread-09.png",
+		"images/spread-10.png", "images/spread-11.png", "images/spread-12.png",
+		"images/spread-13.png", "images/spread-14.png", "images/spread-15.png",
+		"images/spread-16.png", "images/spread-17.png", "images/spread-18.png",
+		"images/spread-19.png", "images/spread-20.png", "images/spread-21.png",
+		"images/spread-22.png", "images/spread-23.png", "images/spread-24.png",
+		"images/spread-25.png", "images/spread-26.png", "images/spread-27.png",
+		"images/spread-28.png", "images/spread-29.png", "images/spread-30.png",
+		"images/spread-31.png", "images/spread-32.png", "images/spread-33.png",
+		"images/spread-34.png", "images/spread-35.png", "images/spread-36.png",
+		"images/spread-37.png", "images/spread-38.png", "images/spread-39.png",
+		"images/spread-40.png", "images/spread-41.png", "images/spread-42.png",
+		"images/spread-43.png", "images/spread-44.png", "images/spread-45.png",
+		"images/spread-46.png", "images/spread-47.png", "images/spread-48.png",
+		"images/spread-49.png", "images/spread-50.png", "images/spread-51.png",
+		"images/spread-52.png", "images/spread-53.png", "images/spread-54.png",
+		"images/spread-55.png", "images/spread-56.png", "images/spread-57.png",
+		"images/spread-58.png", "images/spread-59.png", "images/spread-60.png",
+		"images/spread-61.png", "images/spread-62.png",
 	];
-	// ----------------------------------
 
 	let currentSpreadIndex = 0;
 
 	function updateDisplay() {
 		if (spreadImages.length === 0) {
 			console.error("Image configuration missing: spreadImages array is empty.");
-			document.querySelector('.notebook-container').innerHTML = "<p>Portfolio images not configured.</p>";
+			if (document.querySelector('.notebook-container')) { // Check if container exists
+				document.querySelector('.notebook-container').innerHTML = "<p>Portfolio images not configured.</p>";
+			}
 			return;
 		}
 
 		notebookSpreadImage.src = spreadImages[currentSpreadIndex];
 		notebookSpreadImage.alt = `Portfolio spread ${currentSpreadIndex + 1}`;
 
-		// --- SHOW/HIDE INTRO TEXT ---
-		if (currentSpreadIndex === 0) {
-			introTextOverlay.style.display = 'block'; // Or 'flex' if its internal children need flex
-		} else {
-			introTextOverlay.style.display = 'none';
-		}
-		// -----------------------------
-		//
-		if (currentSpreadIndex === spreadImages.length - 1) { // Check if it's the last spread
-			outroTextOverlay.style.display = 'block';
-		} else {
-			outroTextOverlay.style.display = 'none';
-		}
-		// ---------------------------
+		introTextOverlay.style.display = (currentSpreadIndex === 0) ? 'block' : 'none';
+		outroTextOverlay.style.display = (currentSpreadIndex === spreadImages.length - 1) ? 'block' : 'none';
 
 		updateButtonStates();
 	}
@@ -109,28 +54,46 @@ document.addEventListener('DOMContentLoaded', () => {
 	function updateButtonStates() {
 		const canGoPrev = currentSpreadIndex > 0;
 		goToStartBtn.disabled = !canGoPrev;
-		prevArea.style.pointerEvents = canGoPrev ? 'auto' : 'none';
-		prevArea.style.opacity = canGoPrev ? '1' : '0.5'; // Visual feedback
+		// Check if prevArea exists before trying to set its style
+		if (prevArea) {
+			prevArea.style.pointerEvents = canGoPrev ? 'auto' : 'none';
+			prevArea.style.opacity = canGoPrev ? '1' : '0.5';
+		}
 
 		const canGoNext = currentSpreadIndex < spreadImages.length - 1;
 		goToEndBtn.disabled = !canGoNext;
-		nextArea.style.pointerEvents = canGoNext ? 'auto' : 'none';
-		nextArea.style.opacity = canGoNext ? '1' : '0.5'; // Visual feedback
+		// Check if nextArea exists
+		if (nextArea) {
+			nextArea.style.pointerEvents = canGoNext ? 'auto' : 'none';
+			nextArea.style.opacity = canGoNext ? '1' : '0.5';
+		}
 	}
 
-	nextArea.addEventListener('click', () => {
+	// --- NAVIGATION FUNCTIONS ---
+	function goToNextSpread() {
 		if (currentSpreadIndex < spreadImages.length - 1) {
 			currentSpreadIndex++;
 			updateDisplay();
 		}
-	});
+	}
 
-	prevArea.addEventListener('click', () => {
+	function goToPrevSpread() {
 		if (currentSpreadIndex > 0) {
 			currentSpreadIndex--;
 			updateDisplay();
 		}
-	});
+	}
+	// --------------------------
+
+
+	// --- CLICK EVENT LISTENERS ---
+	// Check if elements exist before adding listeners (good practice)
+	if (nextArea) {
+		nextArea.addEventListener('click', goToNextSpread);
+	}
+	if (prevArea) {
+		prevArea.addEventListener('click', goToPrevSpread);
+	}
 
 	goToStartBtn.addEventListener('click', () => {
 		currentSpreadIndex = 0;
@@ -141,12 +104,41 @@ document.addEventListener('DOMContentLoaded', () => {
 		currentSpreadIndex = spreadImages.length - 1;
 		updateDisplay();
 	});
+	// ---------------------------
+
+
+	// --- KEYBOARD NAVIGATION ---
+	document.addEventListener('keydown', (event) => {
+		// No need to check for activeElement if there are no input fields
+		switch (event.key) {
+			case 'ArrowRight':
+				goToNextSpread();
+				break;
+			case 'ArrowLeft':
+				goToPrevSpread();
+				break;
+			case 'Home':
+				event.preventDefault(); // Prevent default scroll
+				currentSpreadIndex = 0;
+				updateDisplay();
+				break;
+			case 'End':
+				event.preventDefault(); // Prevent default scroll
+				currentSpreadIndex = spreadImages.length - 1;
+				updateDisplay();
+				break;
+		}
+	});
+	// ---------------------------
+
 
 	// Initial Load
 	if (spreadImages.length > 0) {
 		updateDisplay();
 	} else {
 		console.error("Portfolio cannot be loaded: No images configured.");
-		document.querySelector('.notebook-container').innerHTML = "<p>Sorry, the portfolio is currently unavailable.</p>";
+		if (document.querySelector('.notebook-container')) {
+			document.querySelector('.notebook-container').innerHTML = "<p>Sorry, the portfolio is currently unavailable.</p>";
+		}
 	}
 });
