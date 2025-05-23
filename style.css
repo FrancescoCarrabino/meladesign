@@ -7,6 +7,15 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'Reddit Mono';
+    src: url('RedditMono-Regular.woff2') format('woff2'),
+        url('RedditMono-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -42,33 +51,103 @@ html, body {
     object-fit: cover;
 }
 
-/* --- TEXT OVERLAYS --- */
-#introTextOverlay,
+/* --- STYLES FOR INTRO TEXT OVERLAY --- */
+#introTextOverlay {
+    position: absolute;
+    top: 50%; /* Vertically center the block */
+    /* Positioning a bit from the left edge of the viewport */
+    /* This assumes there's black space to the left of your centered notebook image */
+    left: 8vw;  /* Example: 5% of viewport width from the left. Adjust this! */
+    transform: translateY(-50%); /* Only vertical centering for the block */
+
+    width: auto; /* Let content define width */
+    /* Max width to prevent it from becoming too wide and encroaching on the notebook image */
+    /* This value needs to be less than the space available to the left of the notebook image */
+    max-width: 38%; /* Example: Max 30% of viewport width. Adjust this! */
+    padding: 10px; /* Reduced padding */
+
+    text-align: left;
+    color: #ffffff;
+    /* Default font for the block - the pixel font */
+    font-family: 'Argent Pixel CF', monospace; /* Or 'Argent Pixel CF', monospace */
+    z-index: 15;
+    display: none; /* Initially hidden */
+    pointer-events: none;
+    line-height: 1.2; /* Slightly tighter line height overall for the block */
+}
+
+/* "Hi, I'm Mela" */
+#introTextOverlay .intro-line-1 {
+    /* YOU WILL NEED TO FINE-TUNE THIS FONT-SIZE! */
+    /* Look at your spread-01.jpg. Estimate the size of "Portfolio" on it. */
+    /* Then adjust this value until "Hi, I'm Mela" looks visually similar. */
+    font-size: 2.2rem;  /* STARTING GUESS - SMALLER. Adjust this iteratively. */
+    margin-bottom: 0.6rem; /* Reduced space */
+}
+
+/* "This is my portfolio..." */
+#introTextOverlay .intro-line-2 {
+    font-family: 'Reddit Mono', monospace; /* APPLY REDDIT MONO HERE */
+    /* Proportionally smaller than intro-line-1 */
+    font-size: 1rem;   /* STARTING GUESS - SMALLER. Adjust this iteratively. */
+    line-height: 1.4;   /* Adjust line height for Reddit Mono if needed */
+}
+
+#introTextOverlay u { /* Style for the underline */
+    text-decoration-color: #fff;
+    text-decoration-thickness: 1px; /* Pixel fonts often look better with 1px */
+    text-underline-offset: 2px;
+}
 #outroTextOverlay {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%); /* Simplified vertical centering, horizontal will be specific */
-    width: auto;
-    max-width: calc(50% - 40px);
-    padding: 20px;
-    text-align: left;
+    /* Positioning the entire block in the right half of the screen */
+    /* left: 75%; transform: translate(-50%, -50%); This centers the block in the right half */
+    /* OR, to align the left edge of the text block from a point in the right half: */
+    left: 65%; /* Start the block 5% into the right half of the screen. Adjust as needed. */
+    transform: translateY(-50%); /* Only vertical centering for the block */
+
+    width: auto; /* Let content dictate width up to max-width */
+    /* Adjust max-width to ensure it fits nicely on the right "page" */
+    /* e.g., if left is 55%, max-width could be around 40% of viewport width to leave margin */
+    max-width: 38%; /* Max width relative to viewport, adjust this percentage */
+    padding: 20px; /* Internal padding for the text block */
+
+    text-align: left; /* Text within the block is left-aligned */
     color: #ffffff;
-    font-family: 'Argent Pixel CF', monospace;
+    font-family: 'Argent Pixel CF', monospace; /* DEFAULT FONT for this block (your pixel font) */
+                                      /* Replace 'VT323' with 'Argent Pixel CF' if that's the exact name */
     z-index: 15;
-    display: none;
-    pointer-events: none; /* Allows clicks to pass through */
-    line-height: 1.3;
+    display: none; /* Initially hidden */
+    line-height: 1.2; /* Default line height for the block, can be overridden */
 }
 
-#introTextOverlay {
-    left: 25%; /* For centering in the left half */
-    transform: translate(-50%, -50%); /* Precise centering of the block */
+/* Styles for the "Thanks for your attention" part */
+#outroTextOverlay .outro-line-1 {
+    font-size: 2.8rem; /* Adjust to match image */
+    line-height: 1.3;  /* Tighter line height for the pixel heading */
 }
 
-#outroTextOverlay {
-    left: 75%; /* For centering in the right half */
-    transform: translate(-50%, -50%); /* Precise centering of the block */
+
+#outroTextOverlay .contact-details a {
+    color: inherit; /* Inherits the white color from its parent <p> */
+    text-decoration: underline; /* Keeps the underline, common for links */
+    /* If you want a specific underline style like your intro text: */
+    /* text-decoration-color: #fff; */
+    /* text-decoration-thickness: 1px; */ /* Pixel fonts often look better with 1px */
+    /* text-underline-offset: 2px;   */
+    transition: opacity 0.2s ease; /* Smooth transition for hover */
 }
+
+/* Styles for the "Contact:" details block (your #outroSubtitle equivalent) */
+#outroTextOverlay .contact-details {
+    font-family: 'Reddit Mono', monospace; /* Apply the different monospaced font */
+    font-size: 1.2rem;  /* Adjust to match image, this looks smaller than the heading */
+    line-height: 1.6;   /* More spacious line height for readability */
+
+    margin-top: 6rem;
+}
+
 
 #introTextOverlay .intro-line-1 { font-size: 3.5rem; margin-bottom: 1rem; }
 #introTextOverlay .intro-line-2 { font-size: 2rem; }
@@ -100,15 +179,16 @@ html, body {
 .overlay-button {
     position: absolute;
     bottom: 25px;
-    z-index: 20; /* Higher than text overlays and nav arrows */
+    z-index: 20;
     background-color: transparent;
     border: none;
     color: #ffffff;
     padding: 8px 12px;
-    font-family: 'Argent Pixel CF', serif; /* Using Argent Pixel for consistency, with serif fallback */
+    cursor: pointer;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 1rem;
-    display: inline-flex;
-    align-items: center;
+    display: inline-flex; /* Keeps icon and text aligned */
+    align-items: center; /* Vertical alignment */
     opacity: 0.85;
     transition: opacity 0.2s ease;
 }
@@ -119,23 +199,36 @@ html, body {
 
 .overlay-button:disabled {
     opacity: 0.4;
+    cursor: not-allowed;
 }
 
+.button-icon {
+    width: 1.2em; /* Icon size relative to font size */
+    height: 1.2em;
+    vertical-align: middle; /* Good fallback if not using flex for alignment */
+}
+
+/* Positioning for individual buttons */
 #goToStartBtn {
     left: 25px;
-    /* font-family inherit from .overlay-button is fine */
+}
+
+/* Icon specific to #goToStartBtn (Restart button on the left) */
+#goToStartBtn .button-icon {
+    margin-right: 0.4em; /* ADJUST THIS VALUE for space between icon and "Restart" text */
+                         /* Try 0.3em for less space, 0.6em for more space */
 }
 
 #goToEndBtn {
     right: 25px;
-    /* font-family inherit from .overlay-button is fine */
+    /* If you want text first, then icon, ensure HTML order is <span> then <svg> */
 }
 
-.button-icon {
-    width: 1.2em;
-    height: 1.2em;
-    margin-right: 0.5em;
-    vertical-align: middle;
+/* Icon specific to #goToEndBtn (Go to End button on the right) */
+#goToEndBtn .button-icon {
+    margin-left: 0.4em;  /* ADJUST THIS VALUE for space between "Go to End" text and icon */
+                         /* This adds space on the left of the icon */
+    transform: scaleX(-1); /* Horizontally mirrors the icon */
 }
 
 
