@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found — Manuela Papa</title>
+    <style>
+        @font-face {
+            font-family: 'Argent Pixel CF';
+            src: url('fonts/ArgentPixelCF-Regular.woff2') format('woff2'),
+                 url('fonts/ArgentPixelCF-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Argent Pixel CF', monospace;
+            background-color: #222;
+            color: #fff;
+        }
+
+        .error-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 8vw;
+            box-sizing: border-box;
+        }
+
+        .error-code {
+            font-size: clamp(5rem, 3rem + 18vw, 16rem);
+            line-height: 1;
+            margin: 0;
+            letter-spacing: 0.05em;
+        }
+
+        .error-message {
+            font-size: clamp(1.1rem, 0.9rem + 1.4vw, 1.75rem);
+            margin: 1.5rem 0 2.5rem;
+            opacity: 0.85;
+        }
+
+        .home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: inherit;
+            font-size: clamp(1rem, 0.9rem + 0.6vw, 1.25rem);
+            color: #fff;
+            text-decoration: none;
+            padding: 0.7rem 1.6rem;
+            border: 1px solid #fff;
+            border-radius: 999px;
+            transition: background-color 150ms ease, color 150ms ease;
+        }
+
+        .home-link:hover,
+        .home-link:focus-visible {
+            background-color: #fff;
+            color: #222;
+            outline: none;
+        }
+
+        .home-link svg {
+            width: 1em;
+            height: 1em;
+        }
+    </style>
+</head>
+<body>
+    <main class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-message">This page went off the edge of the notebook.</p>
+        <a class="home-link" href="/">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true">
+                <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+            </svg>
+            <span>Back to the portfolio</span>
+        </a>
+    </main>
+</body>
+</html>
