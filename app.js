@@ -49,15 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
     76: [{ kind: 'pocket', src: 'assets/video/pocket-2.mp4',
            label: 'Move for more content', rect: [8.5, 32, 32, 61], pin: [2.5, 8] }],
 
-    62: [{ kind: 'zoom', img: 'assets/photos/ospedale.webp',
-           caption: 'Ospedale Misericordia, Venice', rect: [60, 10, 14, 17] },
-         { kind: 'zoom', img: 'assets/photos/rialto.webp',
-           caption: 'Rialto bridge, Venice', rect: [74, 10, 19, 17],
-           label: 'Move over the photos', pin: [93, 9] }],
-
-    63: [{ kind: 'zoom', img: 'assets/photos/piazzaleroma.webp',
-           caption: 'Piazzale Roma, Venice', rect: [26, 10, 16, 18] },
-         { kind: 'reader',
+    /* The Venice photographs had hover previews on three of them. Manuela
+       wants all of them or none, so for now none: the `zoom` kind still
+       works, and each preview is one line of config away. */
+    63: [{ kind: 'reader',
            label: 'Explore the book here', rect: [50, 4, 47, 92], pin: [83, 9] }],
 
     /* Films open on a click, never on arrival: they cover the spread, and the
@@ -67,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
            frame: [22, 24, 56, 50], pin: [20, 84] }],
 
     49: [{ kind: 'film', src: 'assets/video/pack.mp4',
-           label: 'Open the packaging', rect: [12, 12, 26, 12],
-           frame: [26, 20, 48, 56], pin: [9, 13] }]
+           label: 'Open the packaging', rect: [70, 4, 24, 11],
+           frame: [26, 20, 48, 56], pin: [82, 8] }]
   };
 
   // Pages of the printed 'Ndemo book, shown in the full-screen reader.
