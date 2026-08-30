@@ -20,9 +20,14 @@
     <!-- percentage-positioned click and hover targets, rebuilt per spread -->
     <div id="hotspots" class="hotspots"></div>
 
-    <!-- inline film that sits on top of a spread -->
+    <!-- inline film that sits on top of a spread, opened by its apple -->
     <div id="inlineFilm" class="inline-film" hidden>
       <video id="inlineVideo" playsinline muted loop preload="none"></video>
+      <button id="inlineFilmClose" class="film-close" type="button" aria-label="Close the video">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M7 7l10 10M17 7L7 17"/>
+        </svg>
+      </button>
     </div>
 
     <!-- enlarged photo shown while hovering a contact-sheet thumbnail -->
@@ -31,9 +36,11 @@
       <figcaption id="zoomCaption"></figcaption>
     </figure>
 
-    <div class="page-turn prev" id="prevArea" title="Previous page"></div>
-    <div class="page-turn next" id="nextArea" title="Next page"></div>
   </div>
+
+  <!-- the whole left and right halves of the window turn pages, book or not -->
+  <div class="page-turn prev" id="prevArea" title="Previous page"></div>
+  <div class="page-turn next" id="nextArea" title="Next page"></div>
 
   <div id="intro" class="intro">
     <p class="intro-hello">Hi, I'm Mela</p>

@@ -33,29 +33,42 @@ document.addEventListener('DOMContentLoaded', () => {
     { label: 'Personal Project',      page: 72, rect: [53.5, 86.5, 23, 3.0] }
   ];
 
+  /* `pin` puts the maroon apple on the page at that point, in percent. It is
+     the marker that says this spread has something in it, and it is a click
+     target in its own right. */
   const HOTSPOTS = {
-    3: SUMMARY.map(s => ({ kind: 'jump', page: s.page, label: s.label, rect: s.rect })),
+    3: [
+      ...SUMMARY.map(s => ({ kind: 'jump', page: s.page, label: s.label, rect: s.rect })),
+      { kind: 'jump', page: 6, label: 'Go straight to the projects',
+        rect: [77, 41, 5, 7], pin: [79.5, 44.5] }
+    ],
 
     30: [{ kind: 'pocket', src: 'assets/video/pocket-1.mp4',
-           label: 'Open the pocket', rect: [59, 29, 30, 63] }],
+           label: 'Open the pocket', rect: [59, 29, 30, 63], pin: [91, 23] }],
 
     76: [{ kind: 'pocket', src: 'assets/video/pocket-2.mp4',
-           label: 'Open the pocket', rect: [8.5, 32, 32, 61] }],
+           label: 'Open the pocket', rect: [8.5, 32, 32, 61], pin: [6, 26] }],
 
     62: [{ kind: 'zoom', img: 'assets/photos/ospedale.webp',
            caption: 'Ospedale Misericordia, Venice', rect: [60, 10, 14, 17] },
          { kind: 'zoom', img: 'assets/photos/rialto.webp',
-           caption: 'Rialto bridge, Venice', rect: [74, 10, 19, 17] }],
+           caption: 'Rialto bridge, Venice', rect: [74, 10, 19, 17],
+           label: 'Move over the photographs', pin: [95, 5] }],
 
     63: [{ kind: 'zoom', img: 'assets/photos/piazzaleroma.webp',
            caption: 'Piazzale Roma, Venice', rect: [26, 10, 16, 18] },
-         { kind: 'reader', label: 'Explore the book here', rect: [50, 6, 30, 26] }]
-  };
+         { kind: 'reader',
+           label: 'Explore the book here', rect: [50, 6, 30, 26], pin: [83, 6] }],
 
-  // Films that sit on top of a spread and start when you reach it.
-  const FILMS = {
-    44: { src: 'assets/video/pack.mp4',           rect: [26, 20, 48, 56] },
-    45: { src: 'assets/video/libro-jie-sheng.mp4', rect: [22, 24, 56, 50] }
+    /* Films open on a click, never on arrival: they cover the spread, and the
+       spread is the point. */
+    45: [{ kind: 'film', src: 'assets/video/libro-jie-sheng.mp4',
+           label: 'Leaf through the book', rect: [26, 78, 30, 14],
+           frame: [22, 24, 56, 50], pin: [23, 82] }],
+
+    49: [{ kind: 'film', src: 'assets/video/pack.mp4',
+           label: 'Open the packaging', rect: [12, 12, 26, 12],
+           frame: [26, 20, 48, 56], pin: [9, 15] }]
   };
 
   // Pages of the printed 'Ndemo book, shown in the full-screen reader.
@@ -72,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pocket:     document.getElementById('pocketVideo'),
     film:       document.getElementById('inlineFilm'),
     filmVideo:  document.getElementById('inlineVideo'),
+    filmClose:  document.getElementById('inlineFilmClose'),
     zoom:       document.getElementById('zoom'),
     zoomImage:  document.getElementById('zoomImage'),
     zoomCaption:document.getElementById('zoomCaption'),
@@ -129,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
     el.intro.classList.toggle('is-on', index === 0);
     el.stage.classList.toggle('at-start', index === 0);
 
+    closeFilm();
     buildHotspots(page);
-    setFilm(page);
     preload(index);
 
     if (!instant) {
@@ -162,26 +176,40 @@ document.addEventListener('DOMContentLoaded', () => {
         node.setAttribute('aria-label', spot.label);
       }
 
-      if (spot.kind === 'jump') {
-        node.addEventListener('click', e => { e.stopPropagation(); show(at(spot.page)); });
-      }
+      const act = {
+        jump:   () => show(at(spot.page)),
+        pocket: () => openPocket(spot.src),
+        reader: () => openReader(),
+        film:   () => openFilm(spot),
+        zoom:   () => openZoom(spot)
+      }[spot.kind];
 
-      if (spot.kind === 'pocket') {
-        node.addEventListener('click', e => { e.stopPropagation(); openPocket(spot.src); });
-      }
-
-      if (spot.kind === 'reader') {
-        node.addEventListener('click', e => { e.stopPropagation(); openReader(); });
-      }
+      node.addEventListener('click', e => { e.stopPropagation(); act(); });
 
       if (spot.kind === 'zoom') {
         new Image().src = spot.img; // so the first hover is not a blank frame
         node.addEventListener('pointerenter', () => openZoom(spot));
         node.addEventListener('pointerleave', closeZoom);
-        node.addEventListener('click', e => { e.stopPropagation(); openZoom(spot); });
       }
 
       el.hotspots.appendChild(node);
+
+      // The apple. Always on the page, so you can see there is something here.
+      if (spot.pin) {
+        const pin = document.createElement('button');
+        pin.type = 'button';
+        pin.className = 'pin';
+        pin.style.cssText = `left:${spot.pin[0]}%;top:${spot.pin[1]}%`;
+        pin.innerHTML = '<img src="assets/ui/mela.png" alt="">';
+        if (spot.label) {
+          pin.dataset.label = spot.label;
+          pin.setAttribute('aria-label', spot.label);
+        }
+        if (spot.kind !== 'zoom') {
+          pin.addEventListener('click', e => { e.stopPropagation(); act(); });
+        }
+        el.hotspots.appendChild(pin);
+      }
     });
   }
 
@@ -218,28 +246,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ----------------------------------------------------------------- film */
 
-  function setFilm(page) {
-    const film = FILMS[page];
-    el.filmVideo.pause();
-
-    if (!film) {
-      el.film.hidden = true;
-      el.filmVideo.removeAttribute('src');
-      el.filmVideo.load();
-      return;
-    }
-
-    const [x, y, w, h] = film.rect;
+  function openFilm(spot) {
+    const [x, y, w, h] = spot.frame;
     el.film.style.cssText = `left:${x}%;top:${y}%;width:${w}%;height:${h}%`;
     el.film.hidden = false;
-    el.filmVideo.src = film.src;
-    el.filmVideo.play().catch(() => {}); // a blocked autoplay just leaves it paused
+    el.filmVideo.src = spot.src;
+    el.filmVideo.play().catch(() => {});
   }
 
+  function closeFilm() {
+    el.filmVideo.pause();
+    el.film.hidden = true;
+    el.filmVideo.removeAttribute('src');
+    el.filmVideo.load();
+  }
+
+  // Click the film once to pause it, again on the close button to put it away.
   el.filmVideo.addEventListener('click', e => {
     e.stopPropagation();
     el.filmVideo.paused ? el.filmVideo.play() : el.filmVideo.pause();
   });
+
+  el.filmClose.addEventListener('click', e => { e.stopPropagation(); closeFilm(); });
 
   /* ----------------------------------------------------------------- zoom */
 
@@ -306,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 'ArrowLeft':  prev(); break;
       case 'Home':  e.preventDefault(); show(0); break;
       case 'End':   e.preventDefault(); show(PAGES.length - 1); break;
-      case 'Escape': closePocket(); break;
+      case 'Escape': closePocket(); closeFilm(); break;
     }
   });
 
