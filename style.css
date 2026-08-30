@@ -1,275 +1,396 @@
 @font-face {
-    font-family: 'Argent Pixel CF';
-    src: url('fonts/ArgentPixelCF-Regular.woff2') format('woff2'),
-         url('fonts/ArgentPixelCF-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Argent Pixel CF';
+  src: url('fonts/ArgentPixelCF-Regular.woff2') format('woff2'),
+       url('fonts/ArgentPixelCF-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Reddit Mono';
-    src: url('RedditMono-Regular.woff2') format('woff2'),
-        url('RedditMono-Regular.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+  font-family: 'Reddit Mono';
+  src: url('fonts/RedditMono-Regular.woff2') format('woff2'),
+       url('fonts/RedditMono-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
+
+:root {
+  --ink: #ffffff;
+  --paper: #000000;
+  --accent: #7d2547;
+  --bar: 0.72rem;
+}
+
+* { box-sizing: border-box; }
 
 html, body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    font-family: 'Argent Pixel CF', monospace;
-    background-color: #222;
-    color: #fff;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Reddit Mono', ui-monospace, monospace;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-.notebook-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+body.reading { overflow: hidden; }
+
+.stage {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
 }
 
-.notebook {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background-color: #111;
-    overflow: hidden;
+/* ------------------------------------------------------------------ book */
+
+.book {
+  position: relative;
+  width: min(92vw, calc((100vh - 5.5rem) * 1.372));
+  aspect-ratio: 3440 / 2508;
+  user-select: none;
 }
 
-#notebookSpreadImage {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+/* On the opening page the binder sits to the right, so the book slides over
+   to leave the greeting room to breathe. */
+.stage.at-start .book {
+  transform: translateX(12%);
 }
 
-/* --- STYLES FOR INTRO TEXT OVERLAY --- */
-#introTextOverlay {
-    position: absolute;
-    top: 50%; /* Vertically center the block */
-    /* Positioning a bit from the left edge of the viewport */
-    /* This assumes there's black space to the left of your centered notebook image */
-    left: 8vw;  /* Example: 5% of viewport width from the left. Adjust this! */
-    transform: translateY(-50%); /* Only vertical centering for the block */
-
-    width: auto; /* Let content define width */
-    /* Max width to prevent it from becoming too wide and encroaching on the notebook image */
-    /* This value needs to be less than the space available to the left of the notebook image */
-    max-width: 38%; /* Example: Max 30% of viewport width. Adjust this! */
-    padding: 10px; /* Reduced padding */
-
-    text-align: left;
-    color: #ffffff;
-    /* Default font for the block - the pixel font */
-    font-family: 'Argent Pixel CF', monospace; /* Or 'Argent Pixel CF', monospace */
-    z-index: 15;
-    display: none; /* Initially hidden */
-    pointer-events: none;
-    line-height: 1.2; /* Slightly tighter line height overall for the block */
+@media (max-width: 780px) {
+  .stage.at-start .book { transform: none; }
 }
 
-/* "Hi, I'm Mela" */
-#introTextOverlay .intro-line-1 {
-    /* YOU WILL NEED TO FINE-TUNE THIS FONT-SIZE! */
-    /* Look at your spread-01.jpg. Estimate the size of "Portfolio" on it. */
-    /* Then adjust this value until "Hi, I'm Mela" looks visually similar. */
-    font-size: 2.2rem;  /* STARTING GUESS - SMALLER. Adjust this iteratively. */
-    margin-bottom: 0.6rem; /* Reduced space */
+#spread {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
-/* "This is my portfolio..." */
-#introTextOverlay .intro-line-2 {
-    font-family: 'Reddit Mono', monospace; /* APPLY REDDIT MONO HERE */
-    /* Proportionally smaller than intro-line-1 */
-    font-size: 1rem;   /* STARTING GUESS - SMALLER. Adjust this iteratively. */
-    line-height: 1.4;   /* Adjust line height for Reddit Mono if needed */
+/* The clips are 16:9 and the book sits smaller inside that frame than it does
+   in the still photographs, so the video is blown up and pulled left and up
+   until its binder lands exactly on the binder in the still. Both clips were
+   shot from the same position, so one set of numbers covers them. The photos
+   fly past the edge of the book on purpose: nothing clips them, and the page
+   behind is black anyway. */
+.pocket-video {
+  position: absolute;
+  left: -37.5%;
+  top: -18.2%;
+  width: 175%;
+  height: 135%;
+  object-fit: fill;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 100ms linear;
 }
 
-#introTextOverlay u { /* Style for the underline */
-    text-decoration-color: #fff;
-    text-decoration-thickness: 1px; /* Pixel fonts often look better with 1px */
-    text-underline-offset: 2px;
-}
-#outroTextOverlay {
-    position: absolute;
-    top: 50%;
-    /* Positioning the entire block in the right half of the screen */
-    /* left: 75%; transform: translate(-50%, -50%); This centers the block in the right half */
-    /* OR, to align the left edge of the text block from a point in the right half: */
-    left: 65%; /* Start the block 5% into the right half of the screen. Adjust as needed. */
-    transform: translateY(-50%); /* Only vertical centering for the block */
-
-    width: auto; /* Let content dictate width up to max-width */
-    /* Adjust max-width to ensure it fits nicely on the right "page" */
-    /* e.g., if left is 55%, max-width could be around 40% of viewport width to leave margin */
-    max-width: 38%; /* Max width relative to viewport, adjust this percentage */
-    padding: 20px; /* Internal padding for the text block */
-
-    text-align: left; /* Text within the block is left-aligned */
-    color: #ffffff;
-    font-family: 'Argent Pixel CF', monospace; /* DEFAULT FONT for this block (your pixel font) */
-                                      /* Replace 'VT323' with 'Argent Pixel CF' if that's the exact name */
-    z-index: 15;
-    display: none; /* Initially hidden */
-    line-height: 1.2; /* Default line height for the block, can be overridden */
+.pocket-video.is-on {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: zoom-out;
+  z-index: 6;
 }
 
-/* Styles for the "Thanks for your attention" part */
-#outroTextOverlay .outro-line-1 {
-    font-size: 2.8rem; /* Adjust to match image */
-    line-height: 1.3;  /* Tighter line height for the pixel heading */
+.book.pocket-open #spread { opacity: 0; }
+.book.pocket-open .hotspots,
+.book.pocket-open .page-turn { pointer-events: none; }
+
+/* --------------------------------------------------------- page turning */
+
+.page-turn {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 2;
 }
 
+.page-turn.prev { left: 0;  cursor: w-resize; }
+.page-turn.next { right: 0; cursor: e-resize; }
 
-#outroTextOverlay .contact-details a {
-    color: inherit; /* Inherits the white color from its parent <p> */
-    text-decoration: underline; /* Keeps the underline, common for links */
-    /* If you want a specific underline style like your intro text: */
-    /* text-decoration-color: #fff; */
-    /* text-decoration-thickness: 1px; */ /* Pixel fonts often look better with 1px */
-    /* text-underline-offset: 2px;   */
-    transition: opacity 0.2s ease; /* Smooth transition for hover */
+/* ---------------------------------------------------------------- spots */
+
+.hotspots {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
 }
 
-/* Styles for the "Contact:" details block (your #outroSubtitle equivalent) */
-#outroTextOverlay .contact-details {
-    font-family: 'Reddit Mono', monospace; /* Apply the different monospaced font */
-    font-size: 1.2rem;  /* Adjust to match image, this looks smaller than the heading */
-    line-height: 1.6;   /* More spacious line height for readability */
-
-    margin-top: 6rem;
+.spot {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background-color 140ms ease, box-shadow 140ms ease;
 }
 
-
-#introTextOverlay .intro-line-1 { font-size: 3.5rem; margin-bottom: 1rem; }
-#introTextOverlay .intro-line-2 { font-size: 2rem; }
-#introTextOverlay u { text-decoration-color: #fff; text-decoration-thickness: 2px; text-underline-offset: 3px; }
-
-#outroTextOverlay .outro-line-1 { font-size: 2.8rem; margin-bottom: 1.8rem; }
-#outroTextOverlay .contact-details { font-size: 1.5rem; line-height: 1.5; }
-#outroTextOverlay .contact-details p { margin: 0 0 0.2em 0; }
-
-/* --- NAVIGATION ARROWS --- */
-.nav-arrow {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 50%;
-    z-index: 10; /* Below overlays with pointer-events:none, above image */
-    /* Assuming freccia.png is the pointer/arrow for clickable things */
+.spot:hover,
+.spot:focus-visible {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+  outline: none;
 }
 
-.prev-area {
-    left: 0;
+.spot-jump:hover,
+.spot-jump:focus-visible {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.7);
 }
 
-.next-area {
-    right: 0;
+/* the little maroon apple label, borrowed from the printed stickers */
+.spot[data-label]::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.5rem);
+  transform: translateX(-50%) scale(0.85);
+  transform-origin: bottom center;
+  white-space: nowrap;
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  padding: 0.4em 0.85em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease, transform 140ms ease;
 }
 
-/* --- OVERLAY BUTTONS --- */
-.overlay-button {
-    position: absolute;
-    bottom: 25px;
-    z-index: 20;
-    background-color: transparent;
-    border: none;
-    color: #ffffff;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    font-size: 1rem;
-    display: inline-flex; /* Keeps icon and text aligned */
-    align-items: center; /* Vertical alignment */
-    opacity: 0.85;
-    transition: opacity 0.2s ease;
+.spot[data-label]:hover::after,
+.spot[data-label]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
 
-.overlay-button:hover:not(:disabled) {
-    opacity: 1;
+.spot-jump[data-label]::after { display: none; }
+
+/* ----------------------------------------------------------------- film */
+
+.inline-film {
+  position: absolute;
+  z-index: 5;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
 }
 
-.overlay-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
+.inline-film video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
 }
 
-.button-icon {
-    width: 1.2em; /* Icon size relative to font size */
-    height: 1.2em;
-    vertical-align: middle; /* Good fallback if not using flex for alignment */
+/* ----------------------------------------------------------------- zoom */
+
+.zoom {
+  position: absolute;
+  z-index: 6;
+  left: 12%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42%;
+  margin: 0;
+  padding: 0.9rem 0.9rem 0.6rem;
+  background: #f4f2ec;
+  color: #111;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
 }
 
-/* Positioning for individual buttons */
-#goToStartBtn {
-    left: 25px;
+.zoom img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-/* Icon specific to #goToStartBtn (Restart button on the left) */
-#goToStartBtn .button-icon {
-    margin-right: 0.4em; /* ADJUST THIS VALUE for space between icon and "Restart" text */
-                         /* Try 0.3em for less space, 0.6em for more space */
+.zoom figcaption {
+  margin-top: 0.55rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
 }
 
-#goToEndBtn {
-    right: 25px;
-    /* If you want text first, then icon, ensure HTML order is <span> then <svg> */
+/* ---------------------------------------------------------------- intro */
+
+.intro {
+  position: absolute;
+  left: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 30ch;
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
 }
 
-/* Icon specific to #goToEndBtn (Go to End button on the right) */
-#goToEndBtn .button-icon {
-    margin-left: 0.4em;  /* ADJUST THIS VALUE for space between "Go to End" text and icon */
-                         /* This adds space on the left of the icon */
-    transform: scaleX(-1); /* Horizontally mirrors the icon */
+.intro.is-on { opacity: 1; }
+
+.intro-hello {
+  font-family: 'Argent Pixel CF', serif;
+  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+  margin: 0 0 1.1rem;
 }
 
-
-/* --- MEDIA QUERIES --- */
-/* For Text Overlays */
-@media (max-width: 1200px) {
-    #introTextOverlay .intro-line-1 { font-size: 3rem; }
-    #introTextOverlay .intro-line-2 { font-size: 1.75rem; }
-    #outroTextOverlay .outro-line-1 { font-size: 2.5rem; }
-    #outroTextOverlay .contact-details { font-size: 1.3rem; }
+.intro-sub {
+  margin: 0;
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  line-height: 1.6;
 }
 
-@media (max-width: 768px) {
-    #introTextOverlay .intro-line-1 { font-size: 2.5rem; }
-    #introTextOverlay .intro-line-2 { font-size: 1.5rem; }
-    #outroTextOverlay .outro-line-1 { font-size: 2.2rem; margin-bottom: 1.5rem; }
-    #outroTextOverlay .contact-details { font-size: 1.1rem; }
+/* ------------------------------------------------------------------ bar */
+
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  display: flex;
+  justify-content: space-between;
+  padding: 1.35rem 2rem;
+  pointer-events: none;
 }
 
-@media (max-width: 480px) {
-    #introTextOverlay, #outroTextOverlay {
-        padding: 10px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        max-width: 90%;
-    }
-    #introTextOverlay .intro-line-1 { font-size: 2rem; margin-bottom: 0.5rem; }
-    #introTextOverlay .intro-line-2 { font-size: 1.2rem; }
-    #outroTextOverlay .outro-line-1 { font-size: 1.8rem; margin-bottom: 1rem; }
-    #outroTextOverlay .contact-details { font-size: 1rem; }
+.bar-btn {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--bar);
+  letter-spacing: 0.03em;
+  padding: 0.3em 0;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 140ms ease;
 }
 
-/* For Overlay Buttons */
-@media (max-height: 500px), (max-width: 600px) {
-    .overlay-button {
-        bottom: 15px;
-        font-size: 0.9rem;
-        padding: 6px 10px;
-    }
-    #goToStartBtn { left: 15px; }
-    #goToEndBtn { right: 15px; }
-    .button-icon { width: 1.1em; height: 1.1em; }
+.bar-btn:hover,
+.bar-btn:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  outline: none;
+}
+
+.bar-icon {
+  width: 1em;
+  height: 1em;
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+svg.bar-icon { width: 1.05em; height: 1.05em; }
+
+/* --------------------------------------------------------------- reader */
+
+.reader {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #060606;
+  display: grid;
+  place-items: center;
+}
+
+.reader[hidden] { display: none; }
+
+.reader::after {
+  content: '';
+  position: absolute;
+  inset: 1.1rem;
+  border: 1px solid rgba(120, 140, 210, 0.35);
+  pointer-events: none;
+}
+
+#readerPage {
+  max-width: 80vw;
+  max-height: 82vh;
+  object-fit: contain;
+}
+
+.reader-close {
+  position: absolute;
+  top: 2.2rem;
+  left: 2.4rem;
+  z-index: 2;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.reader-close:hover { opacity: 1; }
+.reader-close svg { width: 100%; height: 100%; }
+
+.reader-turn {
+  position: absolute;
+  top: 0;
+  width: 34%;
+  height: 100%;
+}
+
+.reader-turn.prev { left: 0;  cursor: w-resize; }
+.reader-turn.next { right: 0; cursor: e-resize; }
+
+.reader-count {
+  position: absolute;
+  bottom: 2.2rem;
+  right: 2.4rem;
+  margin: 0;
+  font-size: var(--bar);
+  opacity: 0.6;
+}
+
+/* ----------------------------------------------------------------- phone */
+
+.rotate-hint {
+  display: none;
+  position: fixed;
+  inset: auto 0 4.5rem;
+  text-align: center;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  opacity: 0.55;
+  margin: 0;
+  z-index: 9;
+}
+
+@media (max-width: 780px) and (orientation: portrait) {
+  .rotate-hint { display: block; }
+  .book { width: 96vw; }
+  .intro { left: 5vw; max-width: 24ch; }
+  .bar { padding: 1rem 1.1rem; }
+  .zoom { left: 6%; width: 60%; }
+}
+
+@media (hover: none) {
+  /* nothing to hover on a touch screen, so the labels are always legible */
+  .spot[data-label]::after { opacity: 0.9; transform: translateX(-50%) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
