@@ -33,42 +33,42 @@ document.addEventListener('DOMContentLoaded', () => {
     { label: 'Personal Project',      page: 72, rect: [53.5, 86.5, 23, 3.0] }
   ];
 
-  /* `pin` puts the maroon apple on the page at that point, in percent. It is
-     the marker that says this spread has something in it, and it is a click
-     target in its own right. */
+  /* `pin` sticks Manuela's apple on the page at that point, in percent. The
+     label is printed across the apple, so it reads without hovering, and the
+     apple is a click target in its own right. */
   const HOTSPOTS = {
     3: [
       ...SUMMARY.map(s => ({ kind: 'jump', page: s.page, label: s.label, rect: s.rect })),
-      { kind: 'jump', page: 6, label: 'Go straight to the projects',
-        rect: [77, 41, 5, 7], pin: [79.5, 44.5] }
+      { kind: 'jump', page: 6, label: 'Go directly on the project',
+        rect: [77, 41, 5, 7], pin: [80, 43] }
     ],
 
     30: [{ kind: 'pocket', src: 'assets/video/pocket-1.mp4',
-           label: 'Open the pocket', rect: [59, 29, 30, 63], pin: [91, 23] }],
+           label: 'Move for more content', rect: [59, 29, 30, 63], pin: [93, 10] }],
 
     76: [{ kind: 'pocket', src: 'assets/video/pocket-2.mp4',
-           label: 'Open the pocket', rect: [8.5, 32, 32, 61], pin: [6, 26] }],
+           label: 'Move for more content', rect: [8.5, 32, 32, 61], pin: [2.5, 8] }],
 
     62: [{ kind: 'zoom', img: 'assets/photos/ospedale.webp',
            caption: 'Ospedale Misericordia, Venice', rect: [60, 10, 14, 17] },
          { kind: 'zoom', img: 'assets/photos/rialto.webp',
            caption: 'Rialto bridge, Venice', rect: [74, 10, 19, 17],
-           label: 'Move over the photographs', pin: [95, 5] }],
+           label: 'Move over the photos', pin: [93, 9] }],
 
     63: [{ kind: 'zoom', img: 'assets/photos/piazzaleroma.webp',
            caption: 'Piazzale Roma, Venice', rect: [26, 10, 16, 18] },
          { kind: 'reader',
-           label: 'Explore the book here', rect: [50, 4, 47, 92], pin: [83, 6] }],
+           label: 'Explore the book here', rect: [50, 4, 47, 92], pin: [83, 9] }],
 
     /* Films open on a click, never on arrival: they cover the spread, and the
        spread is the point. */
     45: [{ kind: 'film', src: 'assets/video/libro-jie-sheng.mp4',
            label: 'Leaf through the book', rect: [26, 78, 30, 14],
-           frame: [22, 24, 56, 50], pin: [23, 82] }],
+           frame: [22, 24, 56, 50], pin: [20, 84] }],
 
     49: [{ kind: 'film', src: 'assets/video/pack.mp4',
            label: 'Open the packaging', rect: [12, 12, 26, 12],
-           frame: [26, 20, 48, 56], pin: [9, 15] }]
+           frame: [26, 20, 48, 56], pin: [9, 13] }]
   };
 
   // Pages of the printed 'Ndemo book, shown in the full-screen reader.
@@ -203,11 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
         pin.type = 'button';
         pin.className = 'pin';
         pin.style.cssText = `left:${spot.pin[0]}%;top:${spot.pin[1]}%`;
-        pin.innerHTML = '<img src="assets/ui/mela.png" alt="">';
-        if (spot.label) {
-          pin.dataset.label = spot.label;
-          pin.setAttribute('aria-label', spot.label);
-        }
+        const text = document.createElement('span');
+        text.textContent = spot.label || '';
+        pin.appendChild(text);
+        if (spot.label) pin.setAttribute('aria-label', spot.label);
         if (spot.kind !== 'zoom') {
           pin.addEventListener('click', e => { e.stopPropagation(); act(); });
         }
