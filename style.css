@@ -488,8 +488,11 @@ svg.bar-icon { width: 1.05em; height: 1.05em; }
   .stage.at-start .rotate-hint,
   .stage.at-end .rotate-hint { display: none; }
   .book { width: 92vw; }
-  .stage.at-start .book,
-  .stage.at-end .book { transform: scale(0.8); }
+  /* the closed book sits right of centre in its photograph and the back cover
+     sits left of centre in its own, so each end page is nudged back to the
+     middle of the screen */
+  .stage.at-start .book { transform: translateX(-17.4%) scale(0.8); }
+  .stage.at-end   .book { transform: translateX(17.8%)  scale(0.8); }
   .bar { padding: 1rem 1.1rem; }
   .zoom { width: 78%; }
 
