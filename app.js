@@ -53,23 +53,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     76: [{ kind: 'pocket', src: 'assets/video/pocket-2.mp4',
            rect: [8.5, 32, 32, 61],
-           pinLabel: 'Click to open the pocket', pin: [33, 85] }],
+           pinLabel: 'Click to open the pocket', pin: [35, 92] }],
 
     /* The Venice photographs had hover previews on three of them. Manuela
        wants all of them or none, so for now none: the `zoom` kind still
        works, and each preview is one line of config away. */
-    63: [{ kind: 'reader',
-           label: 'Explore the book here', rect: [50, 4, 47, 92], pin: [83, 9] }],
+    63: [{ kind: 'reader', label: 'Explore the book here', pin: [95, 9] }],
 
     /* Films open on a click, never on arrival: they cover the spread, and the
-       spread is the point. */
+       spread is the point. The apple alone opens them, standing beside the
+       page rather than over it. */
     45: [{ kind: 'film', src: 'assets/video/libro-jie-sheng.mp4',
-           label: 'Leaf through the book', rect: [26, 78, 30, 14],
-           frame: [22, 24, 56, 50], pin: [20, 84] }],
+           label: 'Leaf through the book',
+           frame: [22, 24, 56, 50], pin: [94, 7] }],
 
-    49: [{ kind: 'film', src: 'assets/video/pack.mp4',
-           label: 'Open the packaging', rect: [70, 4, 24, 11],
-           frame: [26, 20, 48, 56], pin: [82, 8] }]
+    /* The packaging runs across three photographs of the same flap, so the
+       apple is on all three. */
+    ...Object.fromEntries([49, 50, 51].map(page => [page, [
+      { kind: 'film', src: 'assets/video/pack.mp4',
+        label: 'Open the packaging',
+        frame: [26, 20, 48, 56], pin: [95, 35] }
+    ]]))
   };
 
   // Pages of the printed 'Ndemo book, shown in the full-screen reader.

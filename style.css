@@ -57,12 +57,23 @@ body.reading { overflow: hidden; }
   user-select: none;
 }
 
-/* The closed book is photographed right of centre in its own frame, so the
-   opening page is pulled left until the book itself sits in the middle of the
-   window. The greeting keeps the empty left third. No scaling: the binder is
-   the same object on every page and has to be the same size on every page. */
+/* The closed book is photographed right of centre in its own frame and the
+   back cover left of centre in its own, so each end page is pulled back until
+   the binder sits in the middle of the window. No scaling: the binder is the
+   same object on every page and has to be the same size on every page.
+
+   The pull gives way before it reaches the words. How much room is left
+   depends on the window's height as much as its width, since a short window
+   makes the book narrower, so a plain breakpoint cannot see the collision:
+   the shift is capped against the width instead and eases off to nothing on a
+   small screen. The sign-off is five lines to the greeting's two and needs
+   the wider berth. */
 .stage.at-start .book {
-  transform: translateX(-21.7%);
+  transform: translateX(calc(-1 * min(21.7%, max(0px, 42vw - 300px))));
+}
+
+.stage.at-end .book {
+  transform: translateX(min(22.3%, max(0px, 42vw - 350px)));
 }
 
 #spread {
