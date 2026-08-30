@@ -181,14 +181,15 @@ body.reading { overflow: hidden; }
 
 /* ------------------------------------------------------------------ pin */
 
-/* Manuela's sticker: her apple with the invitation written across it, tilted
-   the way she sticks them on the printed pages. It marks every spread that has
-   something in it, and it is a click target in its own right. */
+/* Manuela's sticker: her apple with the invitation written across it, the
+   whole thing tilted as one, the way she sticks them on the printed pages. It
+   marks every spread that has something in it, and it is a click target in its
+   own right. */
 .pin {
   position: absolute;
   width: 9.4%;
   aspect-ratio: 240 / 216;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(11deg);
   container-type: inline-size;
   display: grid;
   place-items: center;
@@ -204,7 +205,6 @@ body.reading { overflow: hidden; }
 .pin span {
   width: 88%;
   margin-top: -3%;
-  transform: rotate(11deg);
   font-family: 'Argent Pixel CF', serif;
   font-size: 13cqw;
   line-height: 1.1;
@@ -215,7 +215,7 @@ body.reading { overflow: hidden; }
 
 .pin:hover,
 .pin:focus-visible {
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: translate(-50%, -50%) rotate(11deg) scale(1.08);
   outline: none;
 }
 
