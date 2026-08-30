@@ -45,15 +45,15 @@ document.addEventListener('DOMContentLoaded', () => {
       { kind: 'note', label: 'Go directly on the project', pin: [80, 43] }
     ],
 
-    /* The apple sits on the pocket it opens, so the pocket needs no label of
-       its own: clicking either one runs the clip. */
+    /* The apple sits in the middle of the pocket it opens, so the pocket
+       needs no label of its own: clicking either one runs the clip. */
     30: [{ kind: 'pocket', src: 'assets/video/pocket-1.mp4',
            rect: [59, 29, 30, 63],
-           pinLabel: 'Click to open the pocket', pin: [66, 85] }],
+           pinLabel: 'Click to open the pocket', pin: [73.8, 75] }],
 
     76: [{ kind: 'pocket', src: 'assets/video/pocket-2.mp4',
            rect: [8.5, 32, 32, 61],
-           pinLabel: 'Click to open the pocket', pin: [35, 92] }],
+           pinLabel: 'Click to open the pocket', pin: [24.6, 74] }],
 
     /* The Venice photographs had hover previews on three of them. Manuela
        wants all of them or none, so for now none: the `zoom` kind still
