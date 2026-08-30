@@ -23,31 +23,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Where each summary line jumps to, top to bottom.
   const SUMMARY = [
-    { label: 'Curriculum Vitae',      page: 5,  rect: [53.5, 51.8, 23, 3.0] },
-    { label: 'Internauta del Futuro', page: 6,  rect: [53.5, 59.3, 23, 2.9] },
-    { label: 'Jie Sheng',             page: 26, rect: [53.5, 61.9, 23, 2.6] },
-    { label: 'Servizi Iuav',          page: 54, rect: [53.5, 64.7, 23, 2.6] },
-    { label: "'Ndemo",                page: 59, rect: [53.5, 66.9, 23, 2.6] },
-    { label: 'A voce alta',           page: 64, rect: [53.5, 74.3, 23, 2.6] },
-    { label: 'X1',                    page: 67, rect: [53.5, 81.7, 23, 2.6] },
-    { label: 'Personal Project',      page: 72, rect: [53.5, 86.5, 23, 3.0] }
+    { label: 'Curriculum Vitae',      page: 5,  rect: [54.6, 51.8, 13.5, 3.0] },
+    { label: 'Internauta del Futuro', page: 6,  rect: [54.6, 59.3, 19.3, 2.9] },
+    { label: 'Jie Sheng',             page: 26, rect: [54.6, 61.9, 10.5, 2.6] },
+    { label: 'Servizi Iuav',          page: 54, rect: [54.6, 64.7, 12.6, 2.6] },
+    { label: "'Ndemo",                page: 59, rect: [54.6, 66.9,  8.3, 2.6] },
+    { label: 'A voce alta',           page: 64, rect: [54.6, 74.3, 11.8, 2.6] },
+    { label: 'X1',                    page: 67, rect: [54.6, 81.7,  5.1, 2.6] },
+    { label: 'Personal Project',      page: 72, rect: [54.6, 86.5, 13.2, 3.0] }
   ];
 
   /* `pin` sticks Manuela's apple on the page at that point, in percent. The
-     label is printed across the apple, so it reads without hovering, and the
-     apple is a click target in its own right. */
+     words are printed across the apple, so they read without hovering, and
+     where the apple stands on the thing it opens it is the click target too.
+     `pinLabel` overrides `label` when the rectangle and the apple should not
+     say the same sentence. A `note` apple only captions the page. */
   const HOTSPOTS = {
     3: [
       ...SUMMARY.map(s => ({ kind: 'jump', page: s.page, label: s.label, rect: s.rect })),
-      { kind: 'jump', page: 6, label: 'Go directly on the project',
-        rect: [77, 41, 5, 7], pin: [80, 43] }
+      /* A caption, not a button: it tells you the list is live. */
+      { kind: 'note', label: 'Go directly on the project', pin: [80, 43] }
     ],
 
+    /* The apple sits on the pocket it opens, so the pocket needs no label of
+       its own: clicking either one runs the clip. */
     30: [{ kind: 'pocket', src: 'assets/video/pocket-1.mp4',
-           label: 'Move for more content', rect: [59, 29, 30, 63], pin: [93, 10] }],
+           rect: [59, 29, 30, 63],
+           pinLabel: 'Click to open the pocket', pin: [66, 85] }],
 
     76: [{ kind: 'pocket', src: 'assets/video/pocket-2.mp4',
-           label: 'Move for more content', rect: [8.5, 32, 32, 61], pin: [2.5, 8] }],
+           rect: [8.5, 32, 32, 61],
+           pinLabel: 'Click to open the pocket', pin: [33, 85] }],
 
     /* The Venice photographs had hover previews on three of them. Manuela
        wants all of them or none, so for now none: the `zoom` kind still
@@ -164,16 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!list) return;
 
     list.forEach(spot => {
-      const node = document.createElement('button');
-      node.type = 'button';
-      node.className = `spot spot-${spot.kind}`;
-      const [x, y, w, h] = spot.rect;
-      node.style.cssText = `left:${x}%;top:${y}%;width:${w}%;height:${h}%`;
-      if (spot.label) {
-        node.dataset.label = spot.label;
-        node.setAttribute('aria-label', spot.label);
-      }
-
       const act = {
         jump:   () => show(at(spot.page)),
         pocket: () => openPocket(spot.src),
@@ -182,31 +178,45 @@ document.addEventListener('DOMContentLoaded', () => {
         zoom:   () => openZoom(spot)
       }[spot.kind];
 
-      node.addEventListener('click', e => { e.stopPropagation(); act(); });
+      if (spot.rect) {
+        const node = document.createElement('button');
+        node.type = 'button';
+        node.className = `spot spot-${spot.kind}`;
+        const [x, y, w, h] = spot.rect;
+        node.style.cssText = `left:${x}%;top:${y}%;width:${w}%;height:${h}%`;
+        if (spot.label) {
+          node.dataset.label = spot.label;
+          node.setAttribute('aria-label', spot.label);
+        }
+        node.addEventListener('click', e => { e.stopPropagation(); act(); });
 
-      if (spot.kind === 'zoom') {
-        new Image().src = spot.img; // so the first hover is not a blank frame
-        node.addEventListener('pointerenter', () => openZoom(spot));
-        node.addEventListener('pointerleave', closeZoom);
+        if (spot.kind === 'zoom') {
+          new Image().src = spot.img; // so the first hover is not a blank frame
+          node.addEventListener('pointerenter', () => openZoom(spot));
+          node.addEventListener('pointerleave', closeZoom);
+        }
+
+        el.hotspots.appendChild(node);
       }
-
-      el.hotspots.appendChild(node);
 
       // The apple. Always on the page, so you can see there is something here.
-      if (spot.pin) {
-        const pin = document.createElement('button');
+      if (!spot.pin) return;
+
+      const words = spot.pinLabel || spot.label || '';
+      // `note` apples say what the page does; the rest are the thing you press
+      const live = spot.kind !== 'note' && spot.kind !== 'zoom';
+      const pin = document.createElement(live ? 'button' : 'span');
+      pin.className = live ? 'pin' : 'pin is-note';
+      pin.style.cssText = `left:${spot.pin[0]}%;top:${spot.pin[1]}%`;
+      const text = document.createElement('span');
+      text.textContent = words;
+      pin.appendChild(text);
+      if (live) {
         pin.type = 'button';
-        pin.className = 'pin';
-        pin.style.cssText = `left:${spot.pin[0]}%;top:${spot.pin[1]}%`;
-        const text = document.createElement('span');
-        text.textContent = spot.label || '';
-        pin.appendChild(text);
-        if (spot.label) pin.setAttribute('aria-label', spot.label);
-        if (spot.kind !== 'zoom') {
-          pin.addEventListener('click', e => { e.stopPropagation(); act(); });
-        }
-        el.hotspots.appendChild(pin);
+        pin.setAttribute('aria-label', words);
+        pin.addEventListener('click', e => { e.stopPropagation(); act(); });
       }
+      el.hotspots.appendChild(pin);
     });
   }
 

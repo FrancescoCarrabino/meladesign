@@ -137,12 +137,17 @@ body.reading { overflow: hidden; }
   transition: background-color 140ms ease, box-shadow 140ms ease;
 }
 
-.spot:hover,
-.spot:focus-visible {
+/* Only a rectangle that has something to say lights up. The pocket is
+   clickable along its whole width as a convenience, but the apple standing on
+   it is the thing that announces itself, so the rectangle stays invisible. */
+.spot[data-label]:hover,
+.spot[data-label]:focus-visible {
   background: rgba(255, 255, 255, 0.14);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
   outline: none;
 }
+
+.spot:focus-visible { outline: none; }
 
 .spot-jump:hover,
 .spot-jump:focus-visible {
@@ -181,15 +186,14 @@ body.reading { overflow: hidden; }
 
 /* ------------------------------------------------------------------ pin */
 
-/* Manuela's sticker: her apple with the invitation written across it, the
-   whole thing tilted as one, the way she sticks them on the printed pages. It
-   marks every spread that has something in it, and it is a click target in its
-   own right. */
+/* Manuela's sticker: her apple with the invitation written across it, apple
+   and writing both upright. It marks every spread that has something in it,
+   and where it stands on the thing it opens it is the click target too. */
 .pin {
   position: absolute;
   width: 9.4%;
   aspect-ratio: 240 / 216;
-  transform: translate(-50%, -50%) rotate(11deg);
+  transform: translate(-50%, -50%);
   container-type: inline-size;
   display: grid;
   place-items: center;
@@ -215,8 +219,19 @@ body.reading { overflow: hidden; }
 
 .pin:hover,
 .pin:focus-visible {
-  transform: translate(-50%, -50%) rotate(11deg) scale(1.08);
+  transform: translate(-50%, -50%) scale(1.08);
   outline: none;
+}
+
+/* On the summary the apple is a caption for the list, not a button: the
+   project names underneath are what you click. So it does not move and it
+   does not invite a click. */
+.pin.is-note {
+  cursor: default;
+}
+
+.pin.is-note:hover {
+  transform: translate(-50%, -50%);
 }
 
 /* ----------------------------------------------------------------- film */
