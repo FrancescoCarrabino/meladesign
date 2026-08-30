@@ -274,10 +274,10 @@ body.reading { overflow: hidden; }
 .zoom {
   position: absolute;
   z-index: 6;
-  left: 12%;
+  left: 50%;
   top: 50%;
-  transform: translateY(-50%);
-  width: 42%;
+  transform: translate(-50%, -50%);
+  width: 44%;
   margin: 0;
   padding: 0.9rem 0.9rem 0.6rem;
   background: #f4f2ec;
@@ -325,6 +325,41 @@ body.reading { overflow: hidden; }
   margin: 0;
   font-size: clamp(0.7rem, 1.1vw, 0.85rem);
   line-height: 1.6;
+}
+
+/* ---------------------------------------------------------------- outro */
+
+.outro {
+  position: absolute;
+  right: 8vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.outro.is-on { opacity: 1; pointer-events: auto; }
+
+.outro-hello {
+  font-family: 'Argent Pixel CF', serif;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  margin: 0 0 1.6rem;
+}
+
+.outro-contact {
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  line-height: 1.7;
+}
+
+.outro-contact p { margin: 0; }
+
+.outro-contact a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* ------------------------------------------------------------------ bar */
@@ -397,8 +432,9 @@ svg.bar-icon { width: 1.05em; height: 1.05em; }
 }
 
 #readerPage {
-  max-width: 80vw;
-  max-height: 82vh;
+  /* the pages carry their own margin now, so the frame can go wider */
+  max-width: 90vw;
+  max-height: 90vh;
   object-fit: contain;
 }
 
@@ -454,12 +490,30 @@ svg.bar-icon { width: 1.05em; height: 1.05em; }
   z-index: 9;
 }
 
+/* Upright on a phone there is no room beside the book, so the greeting and
+   the sign-off stack above and below it instead of sitting alongside. */
 @media (max-width: 780px) and (orientation: portrait) {
   .rotate-hint { display: block; }
-  .book { width: 96vw; }
-  .intro { left: 5vw; max-width: 24ch; }
+  /* the greeting and the sign-off already own the space the hint would use */
+  .stage.at-start .rotate-hint,
+  .stage.at-end .rotate-hint { display: none; }
+  .book { width: 92vw; }
+  .stage.at-start .book,
+  .stage.at-end .book { transform: scale(0.8); }
   .bar { padding: 1rem 1.1rem; }
-  .zoom { left: 6%; width: 60%; }
+  .zoom { width: 78%; }
+
+  .intro, .outro {
+    left: 5vw;
+    right: 5vw;
+    top: auto;
+    transform: none;
+    text-align: center;
+  }
+  .intro { bottom: auto; top: 6vh; }
+  .outro { bottom: 8vh; }
+  .intro-hello, .outro-hello { font-size: 1.5rem; }
+  .outro-hello { margin-bottom: 0.9rem; }
 }
 
 @media (hover: none) {

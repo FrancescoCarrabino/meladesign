@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     63: [{ kind: 'zoom', img: 'assets/photos/piazzaleroma.webp',
            caption: 'Piazzale Roma, Venice', rect: [26, 10, 16, 18] },
          { kind: 'reader',
-           label: 'Explore the book here', rect: [50, 6, 30, 26], pin: [83, 6] }],
+           label: 'Explore the book here', rect: [50, 4, 47, 92], pin: [83, 6] }],
 
     /* Films open on a click, never on arrival: they cover the spread, and the
        spread is the point. */
@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     zoomImage:  document.getElementById('zoomImage'),
     zoomCaption:document.getElementById('zoomCaption'),
     intro:      document.getElementById('intro'),
+    outro:     document.getElementById('outro'),
     prev:       document.getElementById('prevArea'),
     next:       document.getElementById('nextArea'),
     summaryBtn: document.getElementById('summaryBtn'),
@@ -141,7 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
     el.spread.alt = `Portfolio page ${page}`;
 
     el.intro.classList.toggle('is-on', index === 0);
+    el.outro.classList.toggle('is-on', index === PAGES.length - 1);
     el.stage.classList.toggle('at-start', index === 0);
+    el.stage.classList.toggle('at-end', index === PAGES.length - 1);
 
     closeFilm();
     buildHotspots(page);
