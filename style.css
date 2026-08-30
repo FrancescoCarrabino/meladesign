@@ -59,13 +59,10 @@ body.reading { overflow: hidden; }
 
 /* The closed book is photographed right of centre in its own frame, so the
    opening page is pulled left until the book itself sits in the middle of the
-   window. The greeting keeps the empty left third. */
+   window. The greeting keeps the empty left third. No scaling: the binder is
+   the same object on every page and has to be the same size on every page. */
 .stage.at-start .book {
-  transform: translateX(-18.2%) scale(0.84);
-}
-
-@media (max-width: 780px) {
-  .stage.at-start .book { transform: none; }
+  transform: translateX(-21.7%);
 }
 
 #spread {
@@ -491,8 +488,8 @@ svg.bar-icon { width: 1.05em; height: 1.05em; }
   /* the closed book sits right of centre in its photograph and the back cover
      sits left of centre in its own, so each end page is nudged back to the
      middle of the screen */
-  .stage.at-start .book { transform: translateX(-17.4%) scale(0.8); }
-  .stage.at-end   .book { transform: translateX(17.8%)  scale(0.8); }
+  .stage.at-start .book { transform: translateX(-21.7%); }
+  .stage.at-end   .book { transform: translateX(22.3%); }
   .bar { padding: 1rem 1.1rem; }
   .zoom { width: 78%; }
 
